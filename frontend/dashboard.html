@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard - TaskMaster</title>
+  <meta name="description" content="Personal productivity dashboard" />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚡</text></svg>" />
+</head>
+<body>
+  <div class="app-container">
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar" id="appSidebar">
+      <div class="sidebar-header">
+        <a href="/" class="brand-logo">
+          <div class="brand-icon">✓</div>
+          <span>TaskMaster</span>
+        </a>
+        <button class="btn-icon-only mobile-menu-btn" onclick="toggleMobileSidebar()" aria-label="Close Sidebar">✕</button>
+      </div>
+
+      <div class="sidebar-content">
+        <!-- Main Views -->
+        <div>
+          <div class="sidebar-section-title">Views</div>
+          <ul class="nav-list">
+            <li class="nav-item active" id="navItemAll" onclick="setQuickFilter('status', 'All')">
+              <div class="nav-item-left">
+                <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h7"/></svg>
+                <span>All Tasks</span>
+              </div>
+              <span class="nav-badge" id="badgeAllTasks">0</span>
+            </li>
+            <li class="nav-item" id="navItemPending" onclick="setQuickFilter('status', 'Pending')">
+              <div class="nav-item-left">
+                <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                <span>Pending</span>
+              </div>
+              <span class="nav-badge" id="badgePending">0</span>
+            </li>
+            <li class="nav-item" id="navItemCompleted" onclick="setQuickFilter('status', 'Completed')">
+              <div class="nav-item-left">
+                <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                <span>Completed</span>
+              </div>
+              <span class="nav-badge" id="badgeCompleted">0</span>
+            </li>
+            <li class="nav-item" id="navItemOverdue" onclick="setQuickFilter('status', 'Overdue')">
+              <div class="nav-item-left">
+                <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                <span>Overdue</span>
+              </div>
+              <span class="nav-badge" id="badgeOverdue" style="background:var(--danger-bg);color:var(--danger);">0</span>
+            </li>
+            <li class="nav-item" id="navItemHighPriority" onclick="setQuickFilter('priority', 'High')">
+              <div class="nav-item-left">
+                <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                <span>High Priority</span>
+              </div>
+              <span class="nav-badge" id="badgeHighPriority">0</span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Categories -->
+        <div>
+          <div class="sidebar-section-title">Categories</div>
+          <ul class="nav-list">
+            <li class="nav-item" id="navItemCatStudy" onclick="setQuickFilter('category', 'Study')">
+              <div class="nav-item-left">
+                <span class="cat-dot study"></span>
+                <span>Study</span>
+              </div>
+              <span class="nav-badge" id="badgeCatStudy">0</span>
+            </li>
+            <li class="nav-item" id="navItemCatWork" onclick="setQuickFilter('category', 'Work')">
+              <div class="nav-item-left">
+                <span class="cat-dot work"></span>
+                <span>Work</span>
+              </div>
+              <span class="nav-badge" id="badgeCatWork">0</span>
+            </li>
+            <li class="nav-item" id="navItemCatPersonal" onclick="setQuickFilter('category', 'Personal')">
+              <div class="nav-item-left">
+                <span class="cat-dot personal"></span>
+                <span>Personal</span>
+              </div>
+              <span class="nav-badge" id="badgeCatPersonal">0</span>
+            </li>
+            <li class="nav-item" id="navItemCatOther" onclick="setQuickFilter('category', 'Other')">
+              <div class="nav-item-left">
+                <span class="cat-dot other"></span>
+                <span>Other</span>
+              </div>
+              <span class="nav-badge" id="badgeCatOther">0</span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- College Mini Project Quick Links -->
+        <div>
+          <div class="sidebar-section-title">Project Info</div>
+          <ul class="nav-list">
+            <li class="nav-item" onclick="openModal('apiDocsModal')">
+              <div class="nav-item-left">
+                <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+                <span>REST API Docs</span>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- User Profile & Footer Controls -->
+      <div class="sidebar-footer">
+        <div class="user-card">
+          <div class="user-avatar" id="sidebarUserAvatar">U</div>
+          <div class="user-info">
+            <div class="user-name" id="sidebarUserName">User</div>
+            <div class="user-email" id="sidebarUserEmail">user@example.com</div>
+          </div>
+        </div>
+        <div class="sidebar-actions">
+          <button class="btn btn-secondary theme-toggle-btn" onclick="toggleTheme()" style="flex:1; padding:8px 12px; font-size:0.8rem;" title="Toggle Theme">
+            🌓 Theme
+          </button>
+          <button class="btn btn-secondary" onclick="logoutUser()" style="flex:1; padding:8px 12px; font-size:0.8rem;" title="Sign out">
+            🚪 Logout
+          </button>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content Wrapper -->
+    <div class="main-wrapper">
+      <!-- Topbar Header -->
+      <header class="topbar">
+        <div class="topbar-left">
+          <button class="mobile-menu-btn" onclick="toggleMobileSidebar()" aria-label="Open Navigation">
+            <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+          </button>
+          <div class="greeting-text">
+            <h1 id="userGreeting">Dashboard</h1>
+            <p>Manage and track your daily priorities</p>
+          </div>
+        </div>
+
+        <div class="topbar-right">
+          <button class="btn-icon-only theme-toggle-btn" onclick="toggleTheme()" title="Toggle Theme" aria-label="Toggle theme">
+            <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+          </button>
+          <button class="btn btn-primary" onclick="openAddTaskModal()">
+            <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            <span>+ Add Task</span>
+          </button>
+        </div>
+      </header>
+
+      <!-- Main Dashboard Content -->
+      <main class="dashboard-content">
+        <!-- Database Disconnected Banner (Graceful Diagnostic Indicator) -->
+        <div id="dbAlertBanner" style="display:none; background:var(--warning-bg); border:1px solid var(--warning-border); color:var(--text-main); padding:14px 20px; border-radius:var(--radius-lg); align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px;">
+          <div style="display:flex; align-items:center; gap:12px;">
+            <span style="font-size:1.4rem;">⚠️</span>
+            <div>
+              <strong>Database in Offline/Memory Mode</strong>: The server is running, but Supabase PostgreSQL is not reachable or unconfigured.
+              <div style="font-size:0.85rem; color:var(--text-secondary); margin-top:2px;">
+                Add your <code>SUPABASE_URL</code> and <code>SUPABASE_KEY</code> in <code>.env</code> to connect cloud PostgreSQL persistence.
+              </div>
+            </div>
+          </div>
+          <button class="btn btn-secondary" onclick="openModal('apiDocsModal')" style="padding:6px 14px; font-size:0.8rem;">
+            Setup Guide
+          </button>
+        </div>
+
+        <!-- Dashboard Metric Cards Row -->
+        <section class="metrics-grid">
+          <!-- Total Tasks -->
+          <div class="metric-card" onclick="setQuickFilter('status', 'All')">
+            <div class="metric-icon-box total">
+              <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+            </div>
+            <div class="metric-details">
+              <div class="metric-label">Total Tasks</div>
+              <div class="metric-value" id="statTotal">0</div>
+            </div>
+          </div>
+
+          <!-- Pending Tasks -->
+          <div class="metric-card" onclick="setQuickFilter('status', 'Pending')">
+            <div class="metric-icon-box pending">
+              <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            </div>
+            <div class="metric-details">
+              <div class="metric-label">Pending</div>
+              <div class="metric-value" id="statPending">0</div>
+            </div>
+          </div>
+
+          <!-- Completed Tasks -->
+          <div class="metric-card" onclick="setQuickFilter('status', 'Completed')">
+            <div class="metric-icon-box completed">
+              <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            <div class="metric-details">
+              <div class="metric-label">Completed</div>
+              <div class="metric-value" id="statCompleted">0</div>
+            </div>
+          </div>
+
+          <!-- Overdue Tasks -->
+          <div class="metric-card" onclick="setQuickFilter('status', 'Overdue')">
+            <div class="metric-icon-box overdue">
+              <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            </div>
+            <div class="metric-details">
+              <div class="metric-label">Overdue</div>
+              <div class="metric-value" id="statOverdue" style="color:var(--danger);">0</div>
+            </div>
+          </div>
+
+          <!-- High Priority Tasks -->
+          <div class="metric-card" onclick="setQuickFilter('priority', 'High')">
+            <div class="metric-icon-box high">
+              <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            </div>
+            <div class="metric-details">
+              <div class="metric-label">High Priority</div>
+              <div class="metric-value" id="statHighPriority">0</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Progress Bar Card -->
+        <section class="progress-card">
+          <div class="progress-info">
+            <div class="progress-header">
+              <span class="progress-title">Overall Task Completion</span>
+              <span class="progress-percentage" id="statPercentage">0%</span>
+            </div>
+            <div class="progress-bar-track">
+              <div class="progress-bar-fill" id="statProgressFill" style="width: 0%;"></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Toolbar: Search, Filters, Sort & View Mode -->
+        <section class="toolbar">
+          <!-- Search box -->
+          <div class="search-box">
+            <svg class="search-icon" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input 
+              type="text" 
+              id="taskSearchInput" 
+              class="search-input" 
+              placeholder="Search tasks by title or description..." 
+              autocomplete="off"
+            />
+          </div>
+
+          <!-- Filter & Sort dropdowns -->
+          <div class="filter-group">
+            <select id="filterStatus" class="select-control" title="Filter by Status">
+              <option value="All">All Statuses</option>
+              <option value="Pending">Pending</option>
+              <option value="Completed">Completed</option>
+              <option value="Overdue">Overdue</option>
+            </select>
+
+            <select id="filterPriority" class="select-control" title="Filter by Priority">
+              <option value="All">All Priorities</option>
+              <option value="High">High</option>
+              <option value="Medium">Medium</option>
+              <option value="Low">Low</option>
+            </select>
+
+            <select id="filterCategory" class="select-control" title="Filter by Category">
+              <option value="All">All Categories</option>
+              <option value="Study">Study</option>
+              <option value="Work">Work</option>
+              <option value="Personal">Personal</option>
+              <option value="Other">Other</option>
+            </select>
+
+            <select id="filterDate" class="select-control" title="Filter by Due Date">
+              <option value="All">All Dates</option>
+              <option value="today">Due Today</option>
+              <option value="week">Due This Week</option>
+              <option value="overdue">Past Due</option>
+            </select>
+
+            <select id="sortTasks" class="select-control" title="Sort Tasks">
+              <option value="newest">Sort: Newest First</option>
+              <option value="oldest">Sort: Oldest First</option>
+              <option value="dueDate_asc">Sort: Due Date (Soonest)</option>
+              <option value="dueDate_desc">Sort: Due Date (Latest)</option>
+              <option value="priority_desc">Sort: Priority (High to Low)</option>
+            </select>
+
+            <button class="btn btn-secondary" onclick="resetAllFilters()" title="Reset Filters" style="padding: 9px 12px; font-size: 0.85rem;">
+              Reset
+            </button>
+
+            <!-- View Toggle -->
+            <div class="view-toggle-btns">
+              <button class="view-btn active" id="viewGridBtn" title="Grid View">
+                <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+              </button>
+              <button class="view-btn" id="viewListBtn" title="List View">
+                <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <!-- Tasks Content Container -->
+        <section class="tasks-container">
+          <div id="tasksContainer" class="tasks-grid">
+            <div class="spinner"></div>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       MODALS
+       ========================================================================== -->
+  <!-- Add / Edit Task Modal -->
+  <div class="modal-overlay" id="taskFormModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 class="modal-title" id="modalFormTitle">Create New Task</h3>
+        <button class="btn-icon-only" onclick="closeModal('taskFormModal')">✕</button>
+      </div>
+      <form id="taskForm">
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="taskTitleInput" class="form-label">Task Title <span class="req">*</span></label>
+            <input 
+              type="text" 
+              id="taskTitleInput" 
+              class="form-control" 
+              placeholder="e.g. Prepare Presentation Slides" 
+              required 
+              maxlength="150"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="taskDescInput" class="form-label">Description</label>
+            <textarea 
+              id="taskDescInput" 
+              class="form-control" 
+              rows="3" 
+              placeholder="Add key notes, steps, or resources..."
+            ></textarea>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="taskDueDateInput" class="form-label">Due Date <span class="req">*</span></label>
+              <input type="date" id="taskDueDateInput" class="form-control" required />
+            </div>
+            <div class="form-group">
+              <label for="taskDueTimeInput" class="form-label">Due Time</label>
+              <input type="time" id="taskDueTimeInput" class="form-control" value="18:00" />
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="taskPriorityInput" class="form-label">Priority</label>
+              <select id="taskPriorityInput" class="form-control">
+                <option value="Low">Low</option>
+                <option value="Medium" selected>Medium</option>
+                <option value="High">High</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="taskCategoryInput" class="form-label">Category</label>
+              <select id="taskCategoryInput" class="form-control">
+                <option value="Study">Study</option>
+                <option value="Work" selected>Work</option>
+                <option value="Personal">Personal</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Subtasks Builder -->
+          <div class="form-group">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <label class="form-label">Subtasks / Checklist (Optional)</label>
+              <button type="button" class="btn btn-secondary" onclick="addSubtaskInputField()" style="padding:4px 10px; font-size:0.75rem;">
+                + Add Subtask
+              </button>
+            </div>
+            <div id="modalSubtasksList" class="subtask-builder-list"></div>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('taskFormModal')">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save Task</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Task Details Modal -->
+  <div class="modal-overlay" id="taskDetailsModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 class="modal-title">Task Details</h3>
+        <button class="btn-icon-only" onclick="closeModal('taskDetailsModal')">✕</button>
+      </div>
+      <div class="modal-body" id="taskDetailsBody"></div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" onclick="closeModal('taskDetailsModal')">Done</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Delete Confirmation Modal -->
+  <div class="modal-overlay" id="deleteConfirmModal">
+    <div class="modal-card" style="max-width: 440px;">
+      <div class="modal-header">
+        <h3 class="modal-title" style="color:var(--danger);">Delete Task?</h3>
+        <button class="btn-icon-only" onclick="closeModal('deleteConfirmModal')">✕</button>
+      </div>
+      <div class="modal-body">
+        <p style="color:var(--text-secondary); font-size:0.95rem;">
+          Are you sure you want to permanently delete <strong id="deleteTaskTitlePreview">this task</strong>? This action cannot be undone.
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" onclick="closeModal('deleteConfirmModal')">Cancel</button>
+        <button type="button" class="btn btn-danger" onclick="confirmDeleteTask()">Yes, Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- REST API Documentation Modal (College Mini-Project Viva & Presentation Helper) -->
+  <div class="modal-overlay" id="apiDocsModal">
+    <div class="modal-card" style="max-width: 680px;">
+      <div class="modal-header">
+        <h3 class="modal-title">REST API Architecture</h3>
+        <button class="btn-icon-only" onclick="closeModal('apiDocsModal')">✕</button>
+      </div>
+      <div class="modal-body" style="font-size:0.875rem;">
+        <p style="color:var(--text-secondary); margin-bottom:12px;">
+          This application implements standard RESTful design with JSON payloads and Bearer token JWT authentication in the <code>Authorization</code> header:
+        </p>
+        <div style="background:var(--bg-surface-secondary); padding:12px; border-radius:var(--radius-md); font-family:var(--font-mono); font-size:0.8rem; margin-bottom:16px;">
+          Authorization: Bearer &lt;jwt_token&gt;
+        </div>
+        <table style="width:100%; border-collapse:collapse; font-size:0.825rem;">
+          <thead>
+            <tr style="text-align:left; border-bottom:1px solid var(--border-subtle); color:var(--text-muted);">
+              <th style="padding:6px 0;">METHOD</th>
+              <th>ENDPOINT</th>
+              <th>ACCESS</th>
+              <th>DESCRIPTION</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="border-bottom:1px solid var(--border-subtle);">
+              <td style="padding:8px 0; font-weight:700; color:var(--cat-study);">POST</td>
+              <td><code>/api/auth/register</code></td>
+              <td>Public</td>
+              <td>Register user & get JWT</td>
+            </tr>
+            <tr style="border-bottom:1px solid var(--border-subtle);">
+              <td style="padding:8px 0; font-weight:700; color:var(--cat-study);">POST</td>
+              <td><code>/api/auth/login</code></td>
+              <td>Public</td>
+              <td>Authenticate & get JWT</td>
+            </tr>
+            <tr style="border-bottom:1px solid var(--border-subtle);">
+              <td style="padding:8px 0; font-weight:700; color:var(--cat-work);">GET</td>
+              <td><code>/api/tasks</code></td>
+              <td>Private</td>
+              <td>Get user tasks (with search/filter/sort)</td>
+            </tr>
+            <tr style="border-bottom:1px solid var(--border-subtle);">
+              <td style="padding:8px 0; font-weight:700; color:var(--cat-study);">POST</td>
+              <td><code>/api/tasks</code></td>
+              <td>Private</td>
+              <td>Create new task</td>
+            </tr>
+            <tr style="border-bottom:1px solid var(--border-subtle);">
+              <td style="padding:8px 0; font-weight:700; color:var(--warning);">PUT</td>
+              <td><code>/api/tasks/:id</code></td>
+              <td>Private</td>
+              <td>Update task details</td>
+            </tr>
+            <tr style="border-bottom:1px solid var(--border-subtle);">
+              <td style="padding:8px 0; font-weight:700; color:var(--success);">PATCH</td>
+              <td><code>/api/tasks/:id/complete</code></td>
+              <td>Private</td>
+              <td>Toggle Pending &lt;-&gt; Completed</td>
+            </tr>
+            <tr style="border-bottom:1px solid var(--border-subtle);">
+              <td style="padding:8px 0; font-weight:700; color:var(--danger);">DELETE</td>
+              <td><code>/api/tasks/:id</code></td>
+              <td>Private</td>
+              <td>Delete task</td>
+            </tr>
+            <tr>
+              <td style="padding:8px 0; font-weight:700; color:var(--cat-work);">GET</td>
+              <td><code>/api/tasks/stats/summary</code></td>
+              <td>Private</td>
+              <td>Dashboard summary statistics</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" onclick="closeModal('apiDocsModal')">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/dashboard.js"></script>
+  <script src="js/tasks.js"></script>
+  <script>
+    function openModal(id) {
+      const m = document.getElementById(id);
+      if (m) m.classList.add('active');
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      // Guard route
+      checkAuth(false);
+      renderUserGreeting();
+      initTaskManager();
+    });
+  </script>
+</body>
+</html>

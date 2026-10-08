@@ -1,0 +1,37 @@
+{
+  "name": "task-manager-webapp",
+  "version": "1.0.0",
+  "description": "Full-stack Modern Task Manager Web Application with HTML5, CSS3, Vanilla JS, Node.js, Express, Supabase PostgreSQL, and JWT Auth",
+  "main": "backend/server.js",
+  "scripts": {
+    "start": "node backend/server.js",
+    "dev": "nodemon backend/server.js",
+    "test": "echo \"Error: no test specified\" && exit 0"
+  },
+  "keywords": [
+    "task-manager",
+    "express",
+    "nodejs",
+    "supabase",
+    "postgresql",
+    "jwt",
+    "bcryptjs",
+    "vanilla-js",
+    "responsive-ui"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@supabase/supabase-js": "^2.117.2",
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "jsonwebtoken": "^9.0.2",
+    "morgan": "^1.10.0",
+    "pg": "^8.23.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.9"
+  }
+}

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sign In - TaskMaster</title>
+  <meta name="description" content="Sign in to your TaskMaster account" />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚡</text></svg>" />
+</head>
+<body class="auth-page">
+  <div class="auth-card">
+    <div style="display:flex; justify-content:flex-end; margin-bottom:-20px;">
+      <button class="btn-icon-only theme-toggle-btn" onclick="toggleTheme()" title="Toggle Theme" aria-label="Toggle theme">
+        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      </button>
+    </div>
+
+    <div class="auth-brand">
+      <div class="brand-icon">✓</div>
+      <h1 class="auth-title">Welcome Back</h1>
+      <p class="auth-subtitle">Enter your credentials to access your task dashboard</p>
+    </div>
+
+    <form id="loginForm" onsubmit="handleLogin(event)">
+      <div class="form-group" style="margin-bottom: 16px;">
+        <label for="loginEmail" class="form-label">Email Address <span class="req">*</span></label>
+        <input 
+          type="email" 
+          id="loginEmail" 
+          name="email" 
+          class="form-control" 
+          placeholder="e.g. alex@example.com" 
+          required 
+          autocomplete="email"
+        />
+      </div>
+
+      <div class="form-group" style="margin-bottom: 24px;">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <label for="loginPassword" class="form-label">Password <span class="req">*</span></label>
+          <a href="#" onclick="showToast('For college demo, simply register a new user or use demo button!', 'info'); return false;" style="font-size: 0.8rem;">Forgot?</a>
+        </div>
+        <input 
+          type="password" 
+          id="loginPassword" 
+          name="password" 
+          class="form-control" 
+          placeholder="••••••••" 
+          required 
+          autocomplete="current-password"
+        />
+      </div>
+
+      <button type="submit" class="btn btn-primary" style="width: 100%; padding: 12px;">
+        Sign In
+      </button>
+    </form>
+
+    <div class="demo-credentials-box">
+      <div>💡 <strong>Quick Demo Mode:</strong></div>
+      <div style="margin-top:4px;">No account yet? Register in 5 seconds or click below:</div>
+      <button type="button" class="btn btn-secondary" onclick="fillDemoCredentials()" style="margin-top: 8px; width: 100%; font-size: 0.8rem; padding: 6px;">
+        Fill Sample Credentials
+      </button>
+    </div>
+
+    <div class="auth-footer">
+      Don't have an account? <a href="/register.html" style="font-weight: 700;">Create an account</a>
+      <div style="margin-top: 10px;">
+        <a href="/" style="font-size: 0.8rem; color: var(--text-muted);">← Back to Homepage</a>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // If already logged in, redirect straight to dashboard
+      checkAuth(true);
+    });
+  </script>
+</body>
+</html>
