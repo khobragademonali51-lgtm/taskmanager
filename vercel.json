@@ -1,0 +1,61 @@
+{
+  "version": 2,
+  "rewrites": [
+    {
+      "source": "/api",
+      "destination": "/api/index.js"
+    },
+    {
+      "source": "/api/(.*)",
+      "destination": "/api/index.js"
+    },
+    {
+      "source": "/frontend/(.*)",
+      "destination": "/frontend/$1"
+    },
+    {
+      "source": "/css/(.*)",
+      "destination": "/frontend/css/$1"
+    },
+    {
+      "source": "/js/(.*)",
+      "destination": "/frontend/js/$1"
+    },
+    {
+      "source": "/login",
+      "destination": "/frontend/login.html"
+    },
+    {
+      "source": "/register",
+      "destination": "/frontend/register.html"
+    },
+    {
+      "source": "/dashboard",
+      "destination": "/frontend/dashboard.html"
+    },
+    {
+      "source": "/login.html",
+      "destination": "/frontend/login.html"
+    },
+    {
+      "source": "/register.html",
+      "destination": "/frontend/register.html"
+    },
+    {
+      "source": "/dashboard.html",
+      "destination": "/frontend/dashboard.html"
+    },
+    {
+      "source": "/index.html",
+      "destination": "/frontend/index.html"
+    },
+    {
+      "source": "/",
+      "destination": "/frontend/index.html"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/frontend/$1"
+    }
+  ]
+}

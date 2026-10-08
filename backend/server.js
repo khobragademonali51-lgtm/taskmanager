@@ -67,8 +67,9 @@ app.use(errorHandler);
 
 const PORT = process.env.PORT || 5000;
 
-const server = app.listen(PORT, () => {
-  console.log(`
+if (!process.env.VERCEL) {
+  const server = app.listen(PORT, () => {
+    console.log(`
 ==================================================
 🚀 Task Manager Server running on port ${PORT}
 🌐 Access Application: http://localhost:${PORT}
@@ -76,10 +77,14 @@ const server = app.listen(PORT, () => {
 🩺 Health Check:       http://localhost:${PORT}/api/health
 🗄️  Database Engine:    Supabase PostgreSQL
 ==================================================
-  `);
-});
+    `);
+  });
+}
 
 // Handle unhandled promise rejections
 process.on('unhandledRejection', (err) => {
   console.error(`Unhandled Rejection Error: ${err.message}`);
 });
+
+module.exports = app;
+
